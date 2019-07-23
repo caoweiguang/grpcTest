@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_package="io.grpc.wale";
+
+package dbConfigInterface;
+
+
+message Status 						// 返回状态实体
+{
+    string resCode = 1;	// 返回状态码		
+	string resMsg = 2;    	// 返回内容
+	string resContent = 3;
+}

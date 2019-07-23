@@ -1,0 +1,47 @@
+syntax = "proto3";//指定版本信息，不指定会报
+
+option java_package="io.grpc.wale";
+
+
+import "status.proto"; //导入定义
+
+package dbConfigInterface;
+
+// message的每一个字段，都要用如下的三个修饰符(modifier)来声明：
+//        1.required：必须赋值，不能为空，否则该条message会被认为是“uninitialized”。
+//		build一个 “uninitialized” message会抛出一个RuntimeException异常，
+//		解析一条“uninitialized” message会抛出一条IOException异常。除此之外，“required”字段跟“optional”字段并无差别。
+//        2.optional：字段可以赋值，也可以不赋值。假如没有赋值的话，会被赋上默认值。
+//		对于简单类型，默认值可以自己设定，例如上例的 PhoneNumber中的PhoneType字段。如果没有自行设定，会被赋上一个系统默认值，
+//		数字类型会被赋为0，String类型会被赋为空字符 串，bool类型会被赋为false。对于内置的message，默认值为该message的默认实例或者原型，
+//		即其内所有字段均为设置。当获取没有显式 设置值的optional字段的值时，就会返回该字段的默认值。
+//		  3.repeated：该字段可以重复任意次数，包括0次。重复数据的顺序将会保存在protocol buffer中，将这个字段想象成一个可以自动设置size的数组就可以了。
+//		由于一些历史原因，数字类型的repeated字段性能有些不尽人意，但是，PB已经做了改进，但是需要再添加一点改动，即在声明后添加[packed=true]
+//		例如：repeated int32 samples = 4 [packed=true];
+message DataSourceRequest  		// 数据源信息实体
+{
+    string id = 1;				
+	string dataName = 2;    	// 数据库名
+	string jdbcUrl = 3;			// 连接URL
+	string driverClass = 4;		// 数据库驱动
+	string user = 5;			// 用户名
+	string password = 6;		// 密码
+	string remake = 7;			// 备注
+	int32  writeOrRead = 8;		// 读/写
+	int32  createTime = 9;		// 创建时间
+	int32  status = 10;  		// 状态 1. 正常 2. 停用 3.删除
+}
+
+message DataSourceReply{ 
+    dbConfigInterface.Status sInfo = 1;
+	repeated DataSourceRequest drInfo = 2;
+}
+
+service DataSourceService{
+    rpc FindAllDataSource (DataSourceRequest) returns (DataSourceReply);
+	rpc AddDataSource (DataSourceRequest) returns (DataSourceReply);
+	rpc UpdateDataSource (DataSourceRequest) returns (DataSourceReply);
+	rpc DelDataSource (DataSourceRequest) returns (DataSourceReply);
+	rpc CountDataSource (DataSourceRequest) returns (DataSourceReply);
+}
+
