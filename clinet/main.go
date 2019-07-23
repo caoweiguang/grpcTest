@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "ch2/helloworld"
+	pb "grpcTest/helloworld"
 	"context"
 	"log"
 
