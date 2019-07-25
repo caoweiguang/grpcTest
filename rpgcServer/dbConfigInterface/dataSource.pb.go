@@ -33,7 +33,8 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 //		  3.repeated：该字段可以重复任意次数，包括0次。重复数据的顺序将会保存在protocol buffer中，将这个字段想象成一个可以自动设置size的数组就可以了。
 //		由于一些历史原因，数字类型的repeated字段性能有些不尽人意，但是，PB已经做了改进，但是需要再添加一点改动，即在声明后添加[packed=true]
 //		例如：repeated int32 samples = 4 [packed=true];
-type DataSourceRequest struct {
+type
+DataSourceRequest struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	DataName             string   `protobuf:"bytes,2,opt,name=dataName,proto3" json:"dataName,omitempty"`
 	JdbcUrl              string   `protobuf:"bytes,3,opt,name=jdbcUrl,proto3" json:"jdbcUrl,omitempty"`

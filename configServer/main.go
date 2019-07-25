@@ -1,10 +1,12 @@
 package main
 
 import (
-	pb "grpcTest/helloworld"
-	"context"
+	"grpcTest/configServer/dao"
+	"grpcTest/rpgcServer/dbConfigInterface"
 	"log"
 	"net"
+	_ "grpcTest/rpgcServer/dbConfigInterface"
+	_ "grpcTest/configServer/dao"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -14,11 +16,6 @@ const (
 	port = ":50051"
 )
 
-type server struct{}	
-
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
-}
 
 func main() {
 	lis, err := net.Listen("tcp", port)
@@ -26,8 +23,9 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
+	dbConfigInterface.RegisterDataSourceServiceServer(s, &dao.Server{})
 
-	pb.RegisterGreeterServer(s, &server{})
+
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
